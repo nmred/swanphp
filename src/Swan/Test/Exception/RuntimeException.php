@@ -12,46 +12,63 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace Swan\Stdlib;
+namespace Swan\Test\Exception;
 
 /**
 +------------------------------------------------------------------------------
-* Trim
+* 运行异常
 +------------------------------------------------------------------------------
 *
 * @package
 * @version $_SWANBR_VERSION_$
-* @copyright Copyleft
+* @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$
 +------------------------------------------------------------------------------
 */
-class Trim
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
-    // {{{ functions
+    // {{{ members
 
     /**
-     * 将数组执行 trim 操作
+     * Usage
      *
-     * @static
+     * @var string
+     * @access protected
+     */
+    protected $usage = '';
+
+    // }}}
+    // {{{ functions
+    // {{{ public function __construct()
+
+    /**
+     * __construct
+     *
+     * @param string $message
+     * @param string $usage
      * @access public
      * @return void
      */
-    public static function trimArray($array, $isUnsetEmpty = true)
+    public function __construct($message, $usage = '')
     {
-        if (!is_array($array)) {
-            return array();
-        }
-
-        $resArray = array();
-        foreach ($array as $key => $value) {
-            $value = trim($value);
-            if ($isUnsetEmpty && '' === $value) {
-                continue;
-            }
-            $resArray[$key] = $value;
-        }
-        return $resArray;
+        $this->usage = $usage;
+        parent::__construct($message);
     }
 
+    // }}}
+    // {{{ public function getUsageMessage()
+
+    /**
+     * return the usage
+     *
+     * @access public
+     * @return string
+     */
+    public function getUsageMessage()
+    {
+        return $this->usage;
+    }
+
+    // }}}
     // }}}
 }

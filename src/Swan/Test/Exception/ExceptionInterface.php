@@ -12,46 +12,19 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace Swan\Stdlib;
+namespace Swan\Test\Exception;
 
 /**
 +------------------------------------------------------------------------------
-* Trim
+* 异常接口
 +------------------------------------------------------------------------------
 *
 * @package
 * @version $_SWANBR_VERSION_$
-* @copyright Copyleft
+* @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$
 +------------------------------------------------------------------------------
 */
-class Trim
+interface ExceptionInterface
 {
-    // {{{ functions
-
-    /**
-     * 将数组执行 trim 操作
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function trimArray($array, $isUnsetEmpty = true)
-    {
-        if (!is_array($array)) {
-            return array();
-        }
-
-        $resArray = array();
-        foreach ($array as $key => $value) {
-            $value = trim($value);
-            if ($isUnsetEmpty && '' === $value) {
-                continue;
-            }
-            $resArray[$key] = $value;
-        }
-        return $resArray;
-    }
-
-    // }}}
 }

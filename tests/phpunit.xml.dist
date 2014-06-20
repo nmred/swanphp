@@ -1,0 +1,21 @@
+<phpunit bootstrap="./Bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Swan Framework Test Suite">
+            <directory>./SwanTest</directory>
+            <exclude>./SwanTest/_files/</exclude>
+            <exclude>./SwanTest/AllTests/</exclude>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>disable</group>
+            <group>integration</group>
+            <group>integration-mysql</group>
+            <group>integration-postgres</group>
+            <group>integration-sqlserver</group>
+            <group>integration-ibm_db2</group>
+        </exclude>
+    </groups>
+
+</phpunit>

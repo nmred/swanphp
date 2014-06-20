@@ -12,46 +12,26 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace Swan\Stdlib;
-
 /**
 +------------------------------------------------------------------------------
-* Trim
+* 安装自动加载器
 +------------------------------------------------------------------------------
 *
 * @package
 * @version $_SWANBR_VERSION_$
-* @copyright Copyleft
+* @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$
 +------------------------------------------------------------------------------
 */
-class Trim
-{
-    // {{{ functions
+include_once __DIR__ . '/../vendor/autoload.php';
 
-    /**
-     * 将数组执行 trim 操作
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function trimArray($array, $isUnsetEmpty = true)
-    {
-        if (!is_array($array)) {
-            return array();
-        }
+$aa = Swan\Stdlib\Trim::trimArray(array());
 
-        $resArray = array();
-        foreach ($array as $key => $value) {
-            $value = trim($value);
-            if ($isUnsetEmpty && '' === $value) {
-                continue;
-            }
-            $resArray[$key] = $value;
-        }
-        return $resArray;
-    }
-
-    // }}}
-}
+$loader = new Swan\Loader\AutoLoader(
+    array(
+        Swan\Loader\Autoloader::LOAD_NS => array(
+            'SwanTest' => __DIR__ . '/SwanTest',
+        ),
+    )
+);
+$loader->register();

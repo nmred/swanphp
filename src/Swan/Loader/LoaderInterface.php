@@ -12,46 +12,48 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace Swan\Stdlib;
+namespace Swan\Loader;
+
+use Traversable;
+
+if (interface_exists('Swan\Loader\LoaderInterface')) return;
 
 /**
-+------------------------------------------------------------------------------
-* Trim
-+------------------------------------------------------------------------------
+* 自动加载 PHP 类的接口
 *
 * @package
 * @version $_SWANBR_VERSION_$
-* @copyright Copyleft
+* @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$
-+------------------------------------------------------------------------------
 */
-class Trim
+interface LoaderInterface
 {
-    // {{{ functions
 
     /**
-     * 将数组执行 trim 操作
+     * 设置参数
      *
-     * @static
+     * @param  array|Traversable $options
      * @access public
      * @return void
      */
-    public static function trimArray($array, $isUnsetEmpty = true)
-    {
-        if (!is_array($array)) {
-            return array();
-        }
+    public function setOptions($options);
 
-        $resArray = array();
-        foreach ($array as $key => $value) {
-            $value = trim($value);
-            if ($isUnsetEmpty && '' === $value) {
-                continue;
-            }
-            $resArray[$key] = $value;
-        }
-        return $resArray;
-    }
+    /**
+     * autoload
+     *
+     * @param  string $class
+     * @access public
+     * @return mixed
+     *         false [如果加载类失败]
+     *         get_class($class) [如果成功]
+     */
+    public function autoload($class);
 
-    // }}}
+    /**
+     * 注册 auto_loader 的方法通过 spl_autoload
+     *
+     * @access public
+     * @return void
+     */
+    public function register();
 }
