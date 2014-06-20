@@ -1,0 +1,20 @@
+{
+    "name": "swansoft/swanphp-stdlib",
+    "description": "Swan Framework 2 stdlib",
+    "type": "library",
+    "keywords": [
+        "framework",
+        "sf2",
+        "stdlib"
+    ],
+    "homepage": "http://wwww.swanlinux.net",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "Swan\\Stdlib\\": ""
+        }
+    }
+}
