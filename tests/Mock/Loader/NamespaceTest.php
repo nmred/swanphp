@@ -12,16 +12,20 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace Swan\Test;
+namespace Mock\Loader;
 
 /**
-* 单元测试抽象类
++------------------------------------------------------------------------------
+* NamespaceTest
++------------------------------------------------------------------------------
 *
 * @package
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$
++------------------------------------------------------------------------------
 */
-abstract class Test extends \PHPUnit_Framework_TestCase
+class NamespaceTest
 {
+
 }

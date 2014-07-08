@@ -25,12 +25,11 @@
 */
 include_once __DIR__ . '/../vendor/autoload.php';
 
-$aa = Swan\Stdlib\Trim::trimArray(array());
-
 $loader = new Swan\Loader\AutoLoader(
     array(
         Swan\Loader\Autoloader::LOAD_NS => array(
             'SwanTest' => __DIR__ . '/SwanTest',
+            'Mock'     => __DIR__ ,
         ),
     )
 );

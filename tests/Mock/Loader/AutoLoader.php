@@ -12,16 +12,38 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace Swan\Test;
+namespace Mock\Loader;
 
 /**
-* 单元测试抽象类
++------------------------------------------------------------------------------
+* AutoLoader
++------------------------------------------------------------------------------
 *
+* @uses Mock\Loader
 * @package
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$
++------------------------------------------------------------------------------
 */
-abstract class Test extends \PHPUnit_Framework_TestCase
+class AutoLoader extends \Swan\Loader\AutoLoader
 {
+    // {{{ members
+    // }}}
+    // {{{ functions
+    // {{{ public function getNamespaces()
+
+    /**
+     * getNamespaces
+     *
+     * @access public
+     * @return void
+     */
+    public function getNamespaces()
+    {
+        return $this->namespaces;
+    }
+
+    // }}}
+    // }}}
 }

@@ -37,12 +37,12 @@ class AutoLoader implements LoaderInterface
     // {{{ members
 
     /**
-     * __namespaces
+     * namespaces
      *
      * @var array
      * @access protected
      */
-    protected $__namespaces = array();
+    protected $namespaces = array();
 
     // }}}
     // {{{ functions
@@ -111,7 +111,7 @@ class AutoLoader implements LoaderInterface
     public function registerNamespace($namespace, $directory)
     {
         $namespace = rtrim($namespace, self::NS_SEPARATOR) . self::NS_SEPARATOR;
-        $this->__namespaces[$namespace] = $this->_normalizeDirectory($directory);
+        $this->namespaces[$namespace] = $this->_normalizeDirectory($directory);
         return $this;
     }
 
@@ -190,8 +190,7 @@ class AutoLoader implements LoaderInterface
             throw new Exception\InvalidArgumentException('invalid namespace type.');
         }
 
-        $attribute = '__' . $type;
-        foreach ($this->{$attribute} as $leader => $path) {
+        foreach ($this->{$type} as $leader => $path) {
             if (0 === strpos($class, $leader)) {
                 $filename = $this->_transformClassNameToFileName($class, $path);
                 if (file_exists($filename)) {
@@ -227,7 +226,7 @@ class AutoLoader implements LoaderInterface
         return $directory
              . str_replace(self::NS_SEPARATOR, '/', $namespace)
              . $class
-             . '.class.php';
+             . '.php';
     }
 
     // }}}
