@@ -12,11 +12,11 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace swan\log\writer;
+namespace Swan\Log\Writer;
 
 /**
 +------------------------------------------------------------------------------
-* sw_abstract 
+* Writer 
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -25,32 +25,32 @@ namespace swan\log\writer;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_abstract
+abstract class WriterAbstract
 {
 	// {{{ members
 	
 	/**
 	 * 日志内容格式化对象 
 	 * 
-	 * @var \swan\log\format\sw_abstract
+	 * @var \Swan\Log\Format\FormatAbstract
 	 * @access protected
 	 */
-	protected $__formatter = null;	
+	protected $formatter = null;	
 
 	// }}}	
 	// {{{ functions
-	// {{{ public function set_formatter()
+	// {{{ public function setFormatter()
 	
 	/**
 	 * 设置格式化日志的对象 
 	 * 
-	 * @param \swan\log\format\sw_abstract $format 
+	 * @param \Swan\Log\Format\FormatAbstract $format 
 	 * @access public
 	 * @return void
 	 */
-	public function set_formatter(\swan\log\format\sw_abstract $format)
+	public function setFormatter(\Swan\Log\Format\FormatAbstract $format)
 	{
-		$this->__formatter = $format;	
+		$this->formatter = $format;	
 	}
 
 	// }}}

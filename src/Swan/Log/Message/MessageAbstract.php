@@ -12,12 +12,11 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace swan\log\message;
-use \swan\log\message\exception\sw_exception;
+namespace Swan\Log\Message;
 
 /**
 +------------------------------------------------------------------------------
-* sw_abstract 
+* Message 
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -26,7 +25,7 @@ use \swan\log\message\exception\sw_exception;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_abstract
+abstract class MessageAbstract
 {
 	// {{{ members
 	
@@ -36,7 +35,7 @@ abstract class sw_abstract
 	 * @var array
 	 * @access protected
 	 */
-	protected $__params = array();
+	protected $params = array();
 
 	/**
 	 * 默认参数 
@@ -44,7 +43,7 @@ abstract class sw_abstract
 	 * @var array
 	 * @access protected
 	 */
-	protected $__default_params = array();
+	protected $defaultParams = array();
 	
 	// }}}	
 	// {{{ functions
@@ -63,9 +62,9 @@ abstract class sw_abstract
 			return;	
 		}
 		
-		foreach ($this->__default_params as $key => $val) {
+		foreach ($this->defaultParams as $key => $val) {
 			if (isset($options[$key])) {
-				$this->__params[$key] = $options[$key];	
+				$this->defaultParams[$key] = $options[$key];	
 			}
 		}	
 	}
@@ -83,10 +82,10 @@ abstract class sw_abstract
 	 */
 	public function __set($name, $value)
 	{
-		if (isset($this->__params[$name])) {
-			$this->__params[$name] = $value;	
+		if (isset($this->params[$name])) {
+			$this->params[$name] = $value;	
 		} else {
-			throw new sw_exception("set name `$name` not exists");	
+			throw new Exception\RuntimeException("set name `$name` not exists");	
 		}
 	}
 
@@ -102,10 +101,10 @@ abstract class sw_abstract
 	 */
 	public function __get($name)
 	{
-		if (isset($this->__params[$name])) {
-			return $this->__params[$name];	
+		if (isset($this->params[$name])) {
+			return $this->params[$name];	
 		} else {
-			throw new sw_exception("get name `$name` not exists.");	
+			throw new Exception\RuntimeException("get name `$name` not exists.");	
 		}
 	}
 
@@ -124,7 +123,7 @@ abstract class sw_abstract
 	}
 
 	// }}}
-	// {{{ protected function _merge_default_params()
+	// {{{ protected function _mergeDefaultParams()
 	
 	/**
 	 * 合并参数 
@@ -132,9 +131,9 @@ abstract class sw_abstract
 	 * @access protected
 	 * @return void
 	 */
-	protected function _merge_default_params()
+	protected function _mergeDefaultParams()
 	{
-		$this->__params = array_merge($this->__default_params, $this->__params);	
+		$this->params = array_merge($this->defaultParams, $this->params);	
 	}
 
 	// }}}

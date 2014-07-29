@@ -12,11 +12,11 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace swan\log\message;
+namespace Swan\Log\Message;
 
 /**
 +------------------------------------------------------------------------------
-* sw_phpd 
+* simple message 
 +------------------------------------------------------------------------------
 * 
 * @uses sw
@@ -27,7 +27,7 @@ namespace swan\log\message;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_phpd extends sw_abstract
+class Simple extends MessageAbstract
 {
 	// {{{ members
 
@@ -38,7 +38,6 @@ class sw_phpd extends sw_abstract
 	 * @access protected
 	 */
 	protected $__params = array(
-		'proc_name' => '',
 		'message'   => '',
 	);
 
@@ -53,11 +52,7 @@ class sw_phpd extends sw_abstract
 	 */
 	protected function _assemble()
 	{
-		if ($this->__params['proc_name']) {
-			return $this->__params['proc_name'] . ', ' . $this->__params['message'];	
-		} else {
-			return $this->__params['message'];	
-		}
+		return $this->__params['message'];	
 	}
 
 	// }}}

@@ -12,12 +12,11 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace swan\log\writer;
-use \swan\log\writer\exception\sw_exception;
+namespace Swan\Log\Writer;
 
 /**
 +------------------------------------------------------------------------------
-* sw_logsvr 
+* rsyslog 
 +------------------------------------------------------------------------------
 * 
 * @uses sw
@@ -28,7 +27,7 @@ use \swan\log\writer\exception\sw_exception;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_logsvr extends sw_abstract
+class Rsyslog extends WriterAbstract
 {
 	// {{{ const
 	
@@ -39,6 +38,18 @@ class sw_logsvr extends sw_abstract
 
 	// }}}
 	// {{{ members
+
+    /**
+     * rsyslog default params 
+     * 
+     * @var array
+     */
+    protected $defaultParams = array(
+        'logId' => 0,
+        'host'  => '127.0.0.1',
+        'port'  => '8888', 
+        'self'  => 'localhost',
+    );
 	
 	/**
 	 * 日志的 ID 
@@ -46,15 +57,15 @@ class sw_logsvr extends sw_abstract
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $__log_id = null;
+	protected $logId = null;
 
 	/**
 	 * 格式化日志对象 
 	 * 
-	 * @var \swan\log\format\sw_abstract
+	 * @var \Swan\Log\Format\FormatAbstract
 	 * @access protected
 	 */
-	protected $__formatter = null;
+	protected $formatter = null;
 
 	/**
 	 * rsyslogd 的主机名 
@@ -62,7 +73,7 @@ class sw_logsvr extends sw_abstract
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $__host = null;
+	protected $host = null;
 
 	/**
 	 * rsyslogd 的端口 
@@ -70,15 +81,15 @@ class sw_logsvr extends sw_abstract
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $__port = null;
+	protected $port = null;
 
 	/**
-	 * __self 
+	 * self 
 	 * 
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $__self = null;
+	protected $self = null;
 
 	// }}}
 	// {{{ functions
@@ -93,39 +104,22 @@ class sw_logsvr extends sw_abstract
 	 */
 	public function __construct(array $options)
 	{
-		if (!isset($options['log_id']) || ($options['log_id'] && !is_int($options['log_id']))) {
-			throw new sw_exception('key `log_id` error'); 		
-		}		
-		$this->__log_id = $options['log_id'];
+        foreach ($this->defaultParams as $key => $value) {
+            if (isset($options[$key])) {
+                $this->$key = $value; 
+            } else {
+                $this->$key = $this->defaultParams[$key];   
+            }
+        }
 
-		if (!isset($options['formatter'])) {
-			$this->__formatter = \swan\log\sw_log::format_factory('simple');
+		if (!isset($options['formatter']) && is_null($this->formatter)) {
+			$this->formatter = \Swan\Log\Format\Simple();
 		} else {
-			if (!($options['formatter'] instanceof \swan\log\format\sw_abstract)) {
-				throw new sw_exception('unknow object');		
+			if (!($options['formatter'] instanceof \Swan\Log\Format\FormatAbstract)) {
+				throw new Exception\InvalidArgumentException('unknow object');		
 			}
-			$this->__formatter = $options['formatter'];
+			$this->formatter = $options['formatter'];
 		}
-
-		if (!isset($options['host']) || !$options['host']) {
-			throw new sw_exception('key	`host` is not set or error.');
-		}
-
-		if (!isset($options['self']) || !$options['self']) {
-			throw new sw_exception('key	`self` is not set or error.');
-		}
-
-		if (false !== strpos($options['host'], ':')) {
-			list($this->__host, $this->__port) = explode(':', $options['host']);
-		} else {
-			if (!isset($options['port']) || !$options['port']) {
-				throw new sw_exception('key `port` is not set or error.');	
-			}				
-			$this->__host = $options['host'];
-			$this->__port = $options['port'];
-		}
-
-		$this->__self = $options['self'];
 	}
 
 	// }}}
@@ -140,24 +134,24 @@ class sw_logsvr extends sw_abstract
 	 */
 	protected function _write($event)
 	{
-		$message = $this->__formatter->format($event);	
-		$msg_len = strlen($message);
-		if (self::MAX_LENGTH < $msg_len) {
+		$message = $this->formatter->format($event);	
+		$msgLen = strlen($message);
+		if (self::MAX_LENGTH < $msgLen) {
 			$message = substr($message, 0, self::MAX_LENGTH);
-			$msg_len = self::MAX_LENGTH;	
+			$msgLen  = self::MAX_LENGTH;	
 		}
 
-		$this->__stream = stream_socket_client("udp://{$this->__host}:{$this->__port}", $errno, $errstr, 1);
-		if (!$this->__stream) {
-			throw new sw_exception('Fail to open logsvr udp port');			
+		$this->stream = stream_socket_client("udp://{$this->host}:{$this->port}", $errno, $errstr, 1);
+		if (!$this->stream) {
+			throw new Exception\InvalidArgumentException('Fail to open logsvr udp port');			
 		}
 			
-		$log_time = date('M d H:i:s');
+		$logTime = date('M d H:i:s');
 		$pid = posix_getpid();
 
-		$log_pack = "<134>$log_time {$this->__self} {$this->__log_id}[$pid]: $message";
-		if ( false == fwrite($this->__stream, $log_pack)) {
-			throw new sw_exception('write log fail.');	
+		$logPack = "<134>$logTime {$this->self} {$this->logId}[$pid]: $message";
+		if ( false == fwrite($this->stream, $log_pack)) {
+			throw new Exception\RuntimeException('write log fail.');	
 		}
 	}
 
@@ -172,11 +166,11 @@ class sw_logsvr extends sw_abstract
 	 */
 	public function shutdown()
 	{
-		if (isset($this->__stream) && is_resource($this->__stream)) {
-			fclose($this->__stream);	
+		if (isset($this->stream) && is_resource($this->stream)) {
+			fclose($this->stream);	
 		}
 
-		$this->__stream = null;
+		$this->stream = null;
 	}
 
 	// }}}
