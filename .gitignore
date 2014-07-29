@@ -10,3 +10,4 @@ composer.lock
 nbproject
 tmp/
 php-cs-fixer.phar
+composer.phar
